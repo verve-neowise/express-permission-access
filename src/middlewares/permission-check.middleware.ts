@@ -22,8 +22,10 @@ export default (...permissions: string[]) => {
             return res.status(400).json("Illegal user id")
         }
 
+        let role = user.role
+
         for(let permission of permissions) {
-            let findPerm = user.permissions.find( (userPermission) => userPermission.name == permission)
+            let findPerm = role.permissions.find( (userPermission) => userPermission.name == permission)
             if (!findPerm) {
                 return res.status(401).json("permission not found")
             }

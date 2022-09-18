@@ -6,15 +6,15 @@ export default class UserService {
         private prisma: PrismaClient
     ) {}
     
-    create(name: string, permissions: number[] = []) {
+    create(name: string, roleId: number) {
 
         return this.prisma.user.create({
             data: {
                 name,
-                permissions: { 
-                    connect: permissions.map(permId => {
-                        return { id: permId }
-                    })
+                role: {
+                    connect: {
+                        id: roleId
+                    }
                 }
             }
         })
@@ -26,7 +26,11 @@ export default class UserService {
                 id
             },
             include: {
-                permissions: true
+                role: {
+                    include: {
+                        permissions: true
+                    }
+                }
             }
         })
     }
@@ -41,9 +45,9 @@ export default class UserService {
                 id
             },
             data: {
-                permissions: {
-                     connect: { id: permissionId } 
-                }
+                // permissions: {
+                //      connect: { id: permissionId } 
+                // }
             }
         })
     }
@@ -54,7 +58,7 @@ export default class UserService {
                 id
             },
             include: {
-                permissions: true
+                role: true
             }
         })
     }

@@ -14,12 +14,22 @@ model User {
   id   Int    @id @default(autoincrement())
   name String
 
+  role   Role @relation(fields: [roleId], references: [id])
+  roleId Int
+}
+
+model Role {
+  id   Int    @id @default(autoincrement())
+  name String @unique
+
   permissions Permission[]
+  User        User[]
 }
 
 model Permission {
-  id     Int    @id @default(autoincrement())
-  name   String @unique
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
-  users   User[]
+  Role   Role? @relation(fields: [roleId], references: [id])
+  roleId Int?
 }
